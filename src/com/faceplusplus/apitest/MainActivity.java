@@ -1,3 +1,4 @@
+
 package com.faceplusplus.apitest;
 
 import java.io.File;
@@ -44,8 +45,8 @@ public class MainActivity extends Activity {
     Handler detectHandler = null;
     Button button = null;
     FaceDetecter detecter = null;
-    HttpRequests request = null;// ����api
-    private static final int SCALE = 5;//��Ƭ��С����
+    HttpRequests request = null;// 在线api
+    private static final int SCALE = 5;//照片缩小比例
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +59,10 @@ public class MainActivity extends Activity {
         imageView.setImageBitmap(curBitmap);
         
         detecter = new FaceDetecter();
-        detecter.init(this, "YOUR-API");
+        detecter.init(this, "YOUR-APIKEY");
         
-        request = new HttpRequests("YOUR-API",
-                "YOUR-SELECT");
+        request = new HttpRequests("YOUR-APIKEY",
+                "YOUR-APISECT");
         
         
 		Button btndect=(Button)findViewById(R.id.detect);
@@ -74,21 +75,21 @@ public class MainActivity extends Activity {
 		                    @Override
 		                    public void run() {
 
-		                        Face[] faceinfo = detecter.findFaces(curBitmap);// ������������
+		                        Face[] faceinfo = detecter.findFaces(curBitmap);// 进行人脸检测
 		                        if (faceinfo == null)
 		                        {
 		                            runOnUiThread(new Runnable() {
 
 		                                @Override
 		                                public void run() {
-		                                    Toast.makeText(MainActivity.this, "δ����������Ϣ", Toast.LENGTH_LONG)
+		                                    Toast.makeText(MainActivity.this, "未发现人脸信息", Toast.LENGTH_LONG)
 		                                            .show();
 		                                }
 		                            });
 		                            return;
 		                        }
 		                        
-		                        //����api����
+		                        //在线api交互
 		                        try {
 		                          
 		                        	 request.offlineDetect(detecter.getImageByteArray(),detecter.getResultJsonString(), new PostParameters());
@@ -120,16 +121,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        detecter.release(this);// �ͷ�����
+        detecter.release(this);// 释放引擎
     }
 
     public void showPicturePicker(Context context,boolean isCrop){
 		//final boolean crop = isCrop;
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("ͼƬ��Դ");
-		builder.setNegativeButton("ȡ��", null);
-		builder.setItems(new String[]{"����","����"}, new DialogInterface.OnClickListener() {
-			//������
+		builder.setTitle("图片来源");
+		builder.setNegativeButton("取消", null);
+		builder.setItems(new String[]{"拍照","相册"}, new DialogInterface.OnClickListener() {
+			//类型码
 			int REQUEST_CODE;
 			
 			@Override
@@ -142,7 +143,7 @@ public class MainActivity extends Activity {
 						REQUEST_CODE = TAKE_PICTURE;
 						fileName = "image.jpg";
 					imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),fileName));
-					//ָ����Ƭ����·����SD������image.jpgΪһ����ʱ�ļ���ÿ�����պ�����ͼƬ���ᱻ�滻
+					//指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
 					openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 					startActivityForResult(openCameraIntent, REQUEST_CODE);
 					break;
@@ -200,12 +201,12 @@ public class MainActivity extends Activity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case TAKE_PICTURE:
-				//�������ڱ��ص�ͼƬȡ������С����ʾ�ڽ�����
+				//将保存在本地的图片取出并缩小后显示在界面上
 				Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+"/image.jpg");
 				curBitmap = ImageTools.zoomBitmap(bitmap, bitmap.getWidth() / SCALE, bitmap.getHeight() / SCALE);
-				//����Bitmap�ڴ�ռ�ýϴ���������Ҫ�����ڴ棬�����ᱨout of memory�쳣
+				//由于Bitmap内存占用较大，这里需要回收内存，否则会报out of memory异常
 				bitmap.recycle();
-				//����������ͼƬ��ʾ�ڽ����ϣ������浽����
+				//将处理过的图片显示在界面上，并保存到本地
 				imageView.setImageBitmap(curBitmap);
 				//ImageTools.savePhotoToSDCard(newBitmap, Environment.getExternalStorageDirectory().getAbsolutePath(), String.valueOf(System.currentTimeMillis()));
 				break;
