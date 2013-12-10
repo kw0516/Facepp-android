@@ -1,4 +1,3 @@
-
 package com.faceplusplus.apitest;
 
 import java.io.File;
@@ -45,8 +44,8 @@ public class MainActivity extends Activity {
     Handler detectHandler = null;
     Button button = null;
     FaceDetecter detecter = null;
-    HttpRequests request = null;// ÔÚÏßapi
-    private static final int SCALE = 5;//ÕÕÆ¬ËõÐ¡±ÈÀý
+    HttpRequests request = null;// ï¿½ï¿½ï¿½ï¿½api
+    private static final int SCALE = 5;//ï¿½ï¿½Æ¬ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +58,10 @@ public class MainActivity extends Activity {
         imageView.setImageBitmap(curBitmap);
         
         detecter = new FaceDetecter();
-        detecter.init(this, "075789e387651c6193ad87dd9ca49925");
+        detecter.init(this, "YOUR-API");
         
-        request = new HttpRequests("075789e387651c6193ad87dd9ca49925",
-                "om9asCb_Kxd4P5id5A5cyp8I0x6CYSg3");
+        request = new HttpRequests("YOUR-API",
+                "YOUR-SELECT");
         
         
 		Button btndect=(Button)findViewById(R.id.detect);
@@ -75,21 +74,21 @@ public class MainActivity extends Activity {
 		                    @Override
 		                    public void run() {
 
-		                        Face[] faceinfo = detecter.findFaces(curBitmap);// ½øÐÐÈËÁ³¼ì²â
+		                        Face[] faceinfo = detecter.findFaces(curBitmap);// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		                        if (faceinfo == null)
 		                        {
 		                            runOnUiThread(new Runnable() {
 
 		                                @Override
 		                                public void run() {
-		                                    Toast.makeText(MainActivity.this, "Î´·¢ÏÖÈËÁ³ÐÅÏ¢", Toast.LENGTH_LONG)
+		                                    Toast.makeText(MainActivity.this, "Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢", Toast.LENGTH_LONG)
 		                                            .show();
 		                                }
 		                            });
 		                            return;
 		                        }
 		                        
-		                        //ÔÚÏßapi½»»¥
+		                        //ï¿½ï¿½ï¿½ï¿½apiï¿½ï¿½ï¿½ï¿½
 		                        try {
 		                          
 		                        	 request.offlineDetect(detecter.getImageByteArray(),detecter.getResultJsonString(), new PostParameters());
@@ -121,16 +120,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        detecter.release(this);// ÊÍ·ÅÒýÇæ
+        detecter.release(this);// ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
     public void showPicturePicker(Context context,boolean isCrop){
 		//final boolean crop = isCrop;
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Í¼Æ¬À´Ô´");
-		builder.setNegativeButton("È¡Ïû", null);
-		builder.setItems(new String[]{"ÅÄÕÕ","Ïà²á"}, new DialogInterface.OnClickListener() {
-			//ÀàÐÍÂë
+		builder.setTitle("Í¼Æ¬ï¿½ï¿½Ô´");
+		builder.setNegativeButton("È¡ï¿½ï¿½", null);
+		builder.setItems(new String[]{"ï¿½ï¿½ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½"}, new DialogInterface.OnClickListener() {
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			int REQUEST_CODE;
 			
 			@Override
@@ -143,7 +142,7 @@ public class MainActivity extends Activity {
 						REQUEST_CODE = TAKE_PICTURE;
 						fileName = "image.jpg";
 					imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),fileName));
-					//Ö¸¶¨ÕÕÆ¬±£´æÂ·¾¶£¨SD¿¨£©£¬image.jpgÎªÒ»¸öÁÙÊ±ÎÄ¼þ£¬Ã¿´ÎÅÄÕÕºóÕâ¸öÍ¼Æ¬¶¼»á±»Ìæ»»
+					//Ö¸ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½SDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½image.jpgÎªÒ»ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ä¼ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Õºï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½á±»ï¿½æ»»
 					openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 					startActivityForResult(openCameraIntent, REQUEST_CODE);
 					break;
@@ -201,12 +200,12 @@ public class MainActivity extends Activity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case TAKE_PICTURE:
-				//½«±£´æÔÚ±¾µØµÄÍ¼Æ¬È¡³ö²¢ËõÐ¡ºóÏÔÊ¾ÔÚ½çÃæÉÏ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½Øµï¿½Í¼Æ¬È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+"/image.jpg");
 				curBitmap = ImageTools.zoomBitmap(bitmap, bitmap.getWidth() / SCALE, bitmap.getHeight() / SCALE);
-				//ÓÉÓÚBitmapÄÚ´æÕ¼ÓÃ½Ï´ó£¬ÕâÀïÐèÒª»ØÊÕÄÚ´æ£¬·ñÔò»á±¨out of memoryÒì³£
+				//ï¿½ï¿½ï¿½ï¿½Bitmapï¿½Ú´ï¿½Õ¼ï¿½Ã½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ú´æ£¬ï¿½ï¿½ï¿½ï¿½ï¿½á±¨out of memoryï¿½ì³£
 				bitmap.recycle();
-				//½«´¦Àí¹ýµÄÍ¼Æ¬ÏÔÊ¾ÔÚ½çÃæÉÏ£¬²¢±£´æµ½±¾µØ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ê¾ï¿½Ú½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æµ½ï¿½ï¿½ï¿½ï¿½
 				imageView.setImageBitmap(curBitmap);
 				//ImageTools.savePhotoToSDCard(newBitmap, Environment.getExternalStorageDirectory().getAbsolutePath(), String.valueOf(System.currentTimeMillis()));
 				break;
